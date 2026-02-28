@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stemmeanalyse</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -222,6 +223,7 @@
     .power-party {
       font-size: 0.82rem; font-weight: 600; color: var(--text);
       display: flex; flex-direction: column; gap: 2px;
+      word-break: break-word;
     }
     .power-party span { font-weight: 400; color: var(--muted); font-size: 0.72rem; }
     .power-bar-wrap {
@@ -272,9 +274,31 @@
       flex-wrap: wrap; gap: 0.5rem;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 800px) {
       nav .nav-links { display: none; }
       .power-row, .power-header { grid-template-columns: 100px 1fr 55px; gap: 0.75rem; }
+
+      /* Spectrum: vertical list instead of cramped track */
+      .spectrum-track {
+        height: auto; background: none;
+        display: flex; flex-direction: column; gap: 0.6rem;
+        margin: 1rem 0;
+      }
+      .spectrum-track::before, .spectrum-track::after {
+        position: static; writing-mode: horizontal-tb;
+        font-size: 0.7rem; margin-bottom: 0.25rem;
+      }
+      .spectrum-track::before { content: '← Venstre'; }
+      .spectrum-track::after  { content: 'Højre →'; }
+      .spectrum-node {
+        position: static; transform: none;
+        flex-direction: row; align-items: center; gap: 0.6rem;
+      }
+      .spectrum-node:nth-child(odd) .spectrum-label,
+      .spectrum-label { position: static; font-size: 0.8rem; }
+      .spectrum-node:nth-child(odd) .spectrum-sublabel,
+      .spectrum-sublabel { display: none; }
+      .spectrum-dot { flex-shrink: 0; }
     }
   </style>
 </head>
@@ -287,14 +311,15 @@
   <ul class="nav-links">
     <li><a href="#matrix">Enighed</a></li>
     <li><a href="#spectrum">Spektrum</a></li>
-    <li><a href="#power">Magtparti</a></li>
+    <li><a href="#power">Magt</a></li>
+    <li><a href="#data">Data</a></li>
   </ul>
 </nav>
 
 <header>
   <p class="eyebrow">Folketing · 2014 – 2026</p>
   <h1>Hvem stemmer<br>med <em>hvem?</em></h1>
-  <p class="lead">Den 24. marts 2026 er der <a href="https://www.ft.dk/da/folketingsvalg">folketingsvalg i Danmark</a>. Dette er dataanalyse af mere end 7.000 afstemninger i Folketinget i perioden 2014-2026. Se hvordan partierne stemmer i forhold til hinanden, hvor de befinder sig på det politiske spektrum, og om de er et magt- eller protestparti.</p>
+  <p class="lead">Den 24. marts 2026 er der folketingsvalg i Danmark. Dette er en dataanalyse af mere end 7.000 afstemninger i Folketinget i perioden 2014-2026. Se hvordan partierne stemmer i forhold til hinanden, hvor de befinder sig på det politiske spektrum, og om de er et magt- eller protestparti.</p>
   <div class="stat-row">
     <div class="stat"><span class="stat-num">7.564</span><span class="stat-label">Afstemninger</span></div>
     <div class="stat"><span class="stat-num">12</span><span class="stat-label">Partier</span></div>
@@ -328,8 +353,8 @@
   <div class="section-inner">
     <div class="section-header">
       <span class="section-number">02 — Spektrum</span>
-      <h2>Politisk akse</h2>
-      <p>Partiernes rækkefølge langs den politiske akse er givet ud fra tabellen ovenfor. Det er svært systematisk at sætte et tal på hvor tæt partierne ligger på aksen, så her nøjes vi med at angive rækkefølgen.</p>
+      <h2>Det politiske spektrum</h2>
+      <p>Ud fra tabellen ovenfor kan vi beregne partiernes rækkefølge på det politiske spektrum.</p>
     </div>
     <div class="card spectrum-card">
       <div class="spectrum-track" id="spectrumTrack"></div>
@@ -341,9 +366,9 @@
 <section class="section" id="power">
   <div class="section-inner">
     <div class="section-header">
-      <span class="section-number">03 — For eller imod</span>
+      <span class="section-number">03 — Magt</span>
       <h2>Magt- eller protestparti</h2>
-      <p>Kombineret score for, hvor ofte et parti stemmer for love der vedtages, og imod love der forkastes. En høj score angiver dét, man typisk kalder et magtparti, en lav score angiver et protestparti.</p>
+      <p>Hvor tit er et parti på den vindende side af en afstemning?</p>
     </div>
     <div class="card" id="powerChart"></div>
   </div>
@@ -355,9 +380,9 @@
     <div class="section-header">
       <span class="section-number">04 — Om data</span>
       <h2>Yderligere oplysninger</h2>
-      <p>Denne hjemmeside er baseret på åbne data fra folketinget, og skal forstås som en indikator fremfor en entydig sandhed. Kun data om de partier der stiller op til valget 2026 er taget med. På grund af uperfektheder i data er en række afstemninger blevet ignoreret. Da dette er blevet gjort systematisk forventer forfatteren ikke en skævvridning af data, men systematiske fejl kan forekomme. Eksempelvis ved at data for længere perioder er blevet fejlformateret, og disse perioder derfor er blevet ignoreret. </p>
-      <p>Rækkefølgen af partier i afstemningsmatricen og langs det politiske spektrum er beregnet som den rækkefølger der gør afstemningsmatricen mest diagonal, og dermed grupperer enige partier sammen, og flytter uenige partier væk fra hinanden.</p>
-      <p>Siden er designet og opsat af Claude.ai, Sonnet 4.6.</p>
+      <p>Denne hjemmeside er baseret på åbne data fra folketinget, og skal forstås som en indikator fremfor en entydig sandhed. Kun data om de partier der stiller op til valget 2026 er taget med. På grund af uperfektheder i data er en række afstemninger blevet ignoreret. Eksempelvis er data for to længere perioder blevet fejlformateret, og disse perioder er derfor ignoreret. </p>
+      <p>Rækkefølgen af partier i afstemningsmatricen og langs det politiske spektrum er beregnet som den rækkefølge der gør afstemningsmatricen mest diagonal. Dermed grupperes enige partier sammen, og uenige partier flyttes væk fra hinanden.</p>
+      <p>Data og beregninger kan findes på <a href="https://github.com/AndBM/stemmeanalyse">GitHub</a>. Siden er designet og opsat af Claude.ai, Sonnet 4.6.</p>
       <p>Forfatteren kan kontaktes via <a href="https://abmichelsen.com">abmichelsen.dk</a></p>
     </div>
   </div>
@@ -573,7 +598,7 @@ function blendColor(t) {
   const container = document.getElementById('powerChart');
   const header = document.createElement('div');
   header.className = 'power-header';
-  header.innerHTML = '<span>Parti</span><span>Vundne afstemninger</span><span>Score</span>';
+  header.innerHTML = '<span>Parti</span><span>Vundne afstemninger</span><span></span>';
   container.appendChild(header);
 
   const grid = document.createElement('div');
