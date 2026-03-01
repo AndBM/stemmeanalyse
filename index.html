@@ -380,8 +380,8 @@
     <div class="section-header">
       <span class="section-number">04 — Om data</span>
       <h2>Yderligere oplysninger</h2>
-      <p>Denne hjemmeside er baseret på åbne data fra folketinget, og skal forstås som en indikator fremfor en entydig sandhed. Kun data om de partier der stiller op til valget 2026 er taget med. På grund af uperfektheder i data er en række afstemninger blevet ignoreret. Eksempelvis er data for to længere perioder blevet fejlformateret, og disse perioder er derfor ignoreret. </p>
-      <p>Rækkefølgen af partier i afstemningsmatricen og langs det politiske spektrum er beregnet som den rækkefølge der gør afstemningsmatricen mest diagonal. Dermed grupperes enige partier sammen, og uenige partier flyttes væk fra hinanden.</p>
+      <p>Denne hjemmeside er baseret på åbne data fra folketinget, og skal forstås som en indikator fremfor en entydig sandhed. Kun data om de partier der stiller op til valget 2026 er taget med. På grund af uperfektheder i data er en række afstemninger blevet ignoreret. Eksempelvis er data for to længere perioder blevet fejlformateret, og disse perioder er derfor ignoreret. Fejl i beregningerne kan desuden forekomme.</p>
+      <p>Rækkefølgen af partier i afstemningsmatricen og langs det politiske spektrum er beregnet som den rækkefølge der gør afstemningsmatricen tættest på diagonal. Dermed grupperes enige partier sammen, og uenige partier flyttes væk fra hinanden.</p>
       <p>Data og beregninger kan findes på <a href="https://github.com/AndBM/stemmeanalyse">GitHub</a>. Siden er designet og opsat af Claude.ai, Sonnet 4.6.</p>
       <p>Forfatteren kan kontaktes via <a href="https://abmichelsen.com">abmichelsen.dk</a></p>
     </div>
@@ -394,8 +394,6 @@
 </footer>
 
 <script>
-// ── DATA PLACEHOLDERS ──
-// Replace these with your actual data
 
 const PARTIES = [
 { short: 'EL',  name: 'Enhedslisten',             color: '#922b21' },  
@@ -413,13 +411,6 @@ const PARTIES = [
 ];
 
 // Agreement matrix (12×12), values 0–1
-// REPLACE with real values — fill with random plausible data for now
-//const AGREEMENT = PARTIES.map((p, i) => PARTIES.map((q, j) => {
-  //if (i === j) return 1;
-  // Placeholder: ideological distance → similarity (replace with real data)
-  //const SPECTRUM_POS = [0.15, 0.72, 0.22, 0.55, 0.05, 0.80, 0.88, 0.78, 0.30, 0.82, 0.92, 0.10];
-  //return Math.max(0, 1 - Math.abs(SPECTRUM_POS[i] - SPECTRUM_POS[j]) * 1.4 + (Math.random() - 0.5) * 0.08);
-//}));
 
 const AGREEMENT = [
   [1.0000, 0.8437, 0.7962, 0.7095, 0.6217, 0.6017, 0.4542, 0.4353, 0.4344, 0.4878, 0.4146, 0.3625],
@@ -436,8 +427,7 @@ const AGREEMENT = [
   [0.3625, 0.3474, 0.3595, 0.3686, 0.4018, 0.4048, 0.4109, 0.5710, 0.6375, 0.7009, 0.7402, 1.0000],
 ];
 
-// Spectrum positions 0 (left) → 1 (right)
-// REPLACE with MDS/PCA result from your real data
+// Spectrum positions 0 (left) → 1 (right). Just evenly distributed.
 const SPECTRUM_POS = {
   'EL': 0.1 ,
   'ALT': 0.17272727, 
@@ -453,34 +443,20 @@ const SPECTRUM_POS = {
   'BP': 0.9
 };
 
-//  'EL': 0.009241334231669318, 
-//  'ALT': 0.0322159627726748, 
-//  'SF': 0.06963506955209904, 
-//  'RV': 0.16133166017875647,
-//  'S':   0.30057557644011834, 
-//  'M':  0.3445744081831493, 
-//  'V': 0.567236280174442, 
-//  'KF': 0.7153525098873476,
-//  'LA':  0.746239377254285, 
-//  'DD': 0.7858805684747309, 
-//  'DF': 0.8845125089719496, 
-//  'BP': 0.9803429199199594
-
 // Power factor: { agree_with_majority, oppose_minority } → single score 0–1
-// REPLACE with real computed values
 const POWER = [
-  { short: 'M',   score: 0.99, label: '99%' },
-  { short: 'S',   score: 0.93, label: '93%' },
-  { short: 'V',  score: 0.88, label: '88%' },
-  { short: 'RV',   score: 0.82, label: '82%' },
-  { short: 'KF',  score: 0.82, label: '82%' },
-  { short: 'LA',  score: 0.75, label: '75%' },
-  { short: 'SF',  score: 0.75, label: '75%' },
-  { short: 'DF',  score: 0.68, label: '68%' },
-  { short: 'DD',  score: 0.64, label: '64%' },
-  { short: 'ALT',  score: 0.61, label: '61%' },
-  { short: 'EL',  score: 0.58, label: '58%' },
-  { short: 'BP', score: 0.46, label: '46%' },
+  { short: 'BP', score: 0.4018, label: '40%'},
+  { short: 'EL', score: 0.5644, label: '56%'},
+  { short: 'ALT', score: 0.5883, label: '59%'},
+  { short: 'DD', score: 0.6018, label: '60%'},
+  { short: 'DF', score: 0.6532, label: '65%'},
+  { short: 'SF', score: 0.7325, label: '73%'},
+  { short: 'LA', score: 0.7358, label: '74%'},
+  { short: 'KF', score: 0.8034, label: '80%'},
+  { short: 'RV', score: 0.8067, label: '81%'},
+  { short: 'V', score: 0.8662, label: '87%'},
+  { short: 'S', score: 0.9097, label: '91%'},
+  { short: 'M', score: 0.9924, label: '99%'},
 ].sort((a, b) => b.score - a.score);
 
 
